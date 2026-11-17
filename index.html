@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09090f">
+  <meta name="description" content="SASIYA MOVIE - Discover your next favorite movie.">
+  <title>SASIYA MOVIE | Premium Movie Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a href="#" class="logo">SASIYA<span> MOVIE</span></a>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#movies">Movies</a>
+    <a href="#watchlist">Watchlist</a>
+  </nav>
+
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="openLogin()">Login</button>
+    <button class="btn-primary" onclick="openAdmin()">Admin</button>
+  </div>
+
+  <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <span class="tag">WELCOME TO SASIYA MOVIE</span>
+      <h1>Movies that<br><span>move you.</span></h1>
+      <p>Explore movies, discover new stories and build your personal watchlist.</p>
+      <div class="hero-buttons">
+        <a href="#movies" class="btn-primary">Explore Movies →</a>
+        <button class="btn-outline" onclick="showFeatured()">Featured Movie</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-poster" id="heroPoster"></div>
+      <div class="floating-label">✦ FEATURED COLLECTION</div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div><strong id="movieCount">0</strong><span>Movies</span></div>
+    <div><strong>HD</strong><span>Movie Library</span></div>
+    <div><strong>24/7</strong><span>Explore Anytime</span></div>
+  </section>
+
+  <section class="movie-section" id="movies">
+    <div class="section-heading">
+      <div>
+        <span class="tag">DISCOVER</span>
+        <h2>Explore Movies</h2>
+      </div>
+      <input id="searchInput" type="search" placeholder="Search movies..." oninput="renderMovies()">
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter active" onclick="setCategory('All',this)">All</button>
+      <button class="filter" onclick="setCategory('Action',this)">Action</button>
+      <button class="filter" onclick="setCategory('Drama',this)">Drama</button>
+      <button class="filter" onclick="setCategory('Sci-Fi',this)">Sci-Fi</button>
+      <button class="filter" onclick="setCategory('Adventure',this)">Adventure</button>
+      <button class="filter" onclick="setCategory('Animation',this)">Animation</button>
+    </div>
+
+    <div class="movie-grid" id="movieGrid"></div>
+    <p class="empty" id="emptyState" hidden>No movies found.</p>
+  </section>
+
+  <section class="movie-section" id="watchlist">
+    <div class="section-heading">
+      <div>
+        <span class="tag">YOUR COLLECTION</span>
+        <h2>My Watchlist</h2>
+      </div>
+    </div>
+    <div class="movie-grid" id="watchlistGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <a href="#" class="logo">SASIYA<span> MOVIE</span></a>
+  <p>© 2026 SASIYA MOVIE. All rights reserved.</p>
+  <p>Discover stories. Enjoy cinema.</p>
+</footer>
+
+<!-- Movie Details -->
+<div class="modal" id="movieModal">
+  <div class="modal-box movie-details">
+    <button class="close" onclick="closeModal('movieModal')">×</button>
+    <img id="detailImage" src="" alt="Movie poster">
+    <div>
+      <span class="tag">MOVIE DETAILS</span>
+      <h2 id="detailTitle"></h2>
+      <p id="detailDescription"></p>
+      <p id="detailMeta"></p>
+      <button class="btn-primary" id="detailWatchlist">＋ Add to Watchlist</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login -->
+<div class="modal" id="loginModal">
+  <div class="modal-box form-box">
+    <button class="close" onclick="closeModal('loginModal')">×</button>
+    <span class="tag">WELCOME BACK</span>
+    <h2>Login / Register</h2>
+    <form id="authForm">
+      <input id="username" placeholder="Username" required minlength="3">
+      <input id="email" type="email" placeholder="Email" required>
+      <input id="password" type="password" placeholder="Password" required minlength="8">
+      <button class="btn-primary full" type="submit">Continue</button>
+    </form>
+    <p class="small">Demo interface only. Connect secure authentication before public use.</p>
+  </div>
+</div>
+
+<!-- Admin -->
+<div class="modal" id="adminModal">
+  <div class="modal-box admin-box">
+    <button class="close" onclick="closeModal('adminModal')">×</button>
+    <span class="tag">CONTROL CENTER</span>
+    <h2>Admin Dashboard</h2>
+    <p class="small">Demo admin panel. Do not use a frontend-only password for real security.</p>
+
+    <form id="adminLoginForm">
+      <input id="adminPassword" type="password" placeholder="Admin demo password" required>
+      <button class="btn-primary full">Unlock Dashboard</button>
+    </form>
+
+    <div id="adminPanel" hidden>
+      <div class="admin-stats">
+        <div><strong id="adminMovieCount">0</strong><span>Total Movies</span></div>
+        <div><strong id="adminWatchCount">0</strong><span>Watchlist Items</span></div>
+      </div>
+
+      <h3>Add / Edit Movie</h3>
+      <form id="movieForm">
+        <input type="hidden" id="editId">
+        <input id="movieTitle" placeholder="Movie title" required>
+        <input id="movieYear" type="number" placeholder="Release year" min="1900" max="2100" required>
+        <input id="movieGenre" placeholder="Genre" required>
+        <input id="moviePoster" type="url" placeholder="Poster image URL" required>
+        <textarea id="movieDescription" placeholder="Description" required></textarea>
+        <button class="btn-primary full">Save Movie</button>
+      </form>
+      <div id="adminMovieList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
